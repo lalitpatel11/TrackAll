@@ -25,9 +25,28 @@ import SubscriptionServices from '../../service/SubscriptionServices';
 //import : modals
 import DeleteAlertModal from '../groups/DeleteAlertModal';
 //import : redux
+//import : third parties
+import {
+  initConnection,
+  endConnection,
+  finishTransaction,
+  flushFailedPurchasesCachedAsPendingAndroid,
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+  getSubscriptions,
+  requestSubscription,
+  SubscriptionPurchase,
+} from 'react-native-iap';
+import CancelSubsIos from '../../modals/CancelSubsIos/CancelSubsIos';
+import CommonToast from '../../constants/CommonToast';
 
 const SubscriptionPlan = ({navigation}: {navigation: any}) => {
   //variables
+  const productSkus = Platform.select({
+    ios: ['Plan_b_monthly'], //will receive from apple account
+    android: [],
+    default: [],
+  }) as string[];
   const toastRef = useRef<any>();
   //hook : states
   const [deleteModal, setDeleteModal] = useState(false);
@@ -38,7 +57,61 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
   const [myUserId, setMyUserId] = useState<any>();
   const [planId, setPlanId] = useState('');
   const [webViewModal, setWebViewModal] = useState(false);
-  //function : imp func
+  const [monthlyIosSubs, setMonthlyIosSubs] = useState([]);
+  const [showCancelSub, setShowCancelSub] = useState(false);
+  //function : imp functio
+  useEffect(() => {
+    let purchaseUpdateSubscription = null;
+    let purchaseErrorSubscription = null;
+    const initializeConnection = async () => {
+      try {
+        await initConnection();
+        if (Platform.OS === 'android') {
+          await flushFailedPurchasesCachedAsPendingAndroid();
+          purchaseUpdateSubscription = purchaseUpdatedListener(
+            (purchase: SubscriptionPurchase) => {
+              const receipt = purchase.transactionReceipt;
+              console.log(receipt);
+            },
+          );
+          purchaseErrorSubscription = purchaseErrorListener((error: any) => {
+            console.warn('purchaseErrorListener', error);
+          });
+        }
+      } catch (error) {
+        console.error('An error occurred', error.message);
+      }
+    };
+    fetchProducts();
+    initializeConnection();
+    return () => {
+      purchaseUpdateSubscription = null;
+      purchaseErrorSubscription = null;
+    };
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const products = await getSubscriptions({
+        skus: Platform.select({
+          ios: [
+            'Plan_b_monthly',
+            'Plan_c_monthly',
+            'Plan_d_monthly',
+            'Plan_b_yearly',
+            'Plan_c_yearly',
+            'Plan_d_yearly',
+          ],
+          android: [],
+        }),
+      });
+      setMonthlyIosSubs(products);
+    } catch (error) {
+      console.error('Error occurred while fetching products', error.message);
+    }
+  };
+
+  // navigation on payment click
   const handleSubmitButtonClick = async (item: any) => {
     if (Platform.OS === 'ios') {
       const index = monthlyIosSubs.findIndex(e => e.productId == item.title);
@@ -55,6 +128,28 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
       setWebViewModal(true);
     }
   };
+
+  // function on pay button click on api call
+  const onSubmit = async (values: any) => {
+    const data = {
+      plan_id: values?.planId,
+      transactionReceipt: values.transactionReceipt,
+      transactionId: values.transactionId,
+    };
+    SubscriptionServices.purchaseAppleSubscription(data)
+      .then((response: any) => {
+        if (response.data.status) {
+          toastRef.current.getToast(response.data.message, 'success');
+          getMyPlan();
+          getAllPlans();
+        } else {
+          toastRef.current.getToast(response.data.message, 'warning');
+        }
+      })
+      .catch((error: any) => {
+        console.error('error', JSON.stringify(error));
+      });
+  };
   const handleSkip = () => {
     return <View />;
   };
@@ -64,6 +159,8 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
     setMyUserId(token);
     SubscriptionServices.getMySubscription()
       .then((response: any) => {
+        console.log('RESPONSE:::::', response.data);
+
         setPageLoader(false);
         setMySubscriptionPlan(response.data.plandetails);
       })
@@ -90,7 +187,20 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={() => handleSubmitButtonClick(item)}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
@@ -99,7 +209,20 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={() => handleSubmitButtonClick(item)}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
@@ -168,7 +291,11 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
               {mySubscriptionPlan?.price !== 'Free' ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setDeleteModal(true);
+                    if (Platform.OS === 'android') {
+                      setDeleteModal(true);
+                    } else {
+                      setShowCancelSub(true);
+                    }
                   }}
                   style={styles.cancelButtonContainer}>
                   <Text style={styles.cancelButtonText}>
@@ -268,6 +395,8 @@ const SubscriptionPlan = ({navigation}: {navigation: any}) => {
           'Are you sure you want to cancel your current subscription ?'
         }
       />
+      <CommonToast ref={toastRef} />
+      <CancelSubsIos visible={showCancelSub} setVisibility={setShowCancelSub} />
     </View>
   );
 };

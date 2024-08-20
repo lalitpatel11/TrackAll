@@ -23,6 +23,44 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851086813075:android:f6f57264d2d7ae956a6a66",
+        "android_client_info": {
+          "package_name": "com.trackallapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIxU_qRos1XdFUWANXHUBJ1PkQMZiM4PU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851086813075:android:2fcb882726a42e616a6a66",
+        "android_client_info": {
+          "package_name": "com.trackallpro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIxU_qRos1XdFUWANXHUBJ1PkQMZiM4PU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"

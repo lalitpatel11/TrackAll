@@ -124,16 +124,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalViewRepeat: {
-    backgroundColor: colors.brightGray,
+    backgroundColor: colors.BLACK2,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     height: '70%',
     padding: 10,
     paddingTop: 20,
   },
-  direction: {flexDirection: 'row', justifyContent: 'space-between'},
+  direction: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   followerText: {
-    color: colors.THEME_BLACK,
+    color: colors.WHITE,
     fontSize: 20,
     fontWeight: '500',
   },
@@ -148,9 +151,9 @@ const styles = StyleSheet.create({
     width: '84%',
   },
   searchInput: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.BLACK3,
     borderRadius: 8,
-    color: colors.BLACK,
+    color: colors.WHITE,
     fontSize: 16,
     padding: 10,
     paddingLeft: 10,
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noDataText: {
-    color: colors.THEME_BLACK,
+    color: colors.WHITE,
     fontSize: 20,
     fontWeight: '500',
     textAlign: 'center',

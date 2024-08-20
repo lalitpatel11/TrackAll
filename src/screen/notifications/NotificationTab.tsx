@@ -28,7 +28,6 @@ const NotificationTab = ({
           {/* group title  */}
           <View style={styles.nameContainer}>
             <Text style={styles.date}>{notificationTime}</Text>
-
             <Text style={styles.notificationText}>{items?.message}</Text>
           </View>
         </TouchableOpacity>
@@ -50,7 +49,7 @@ export default NotificationTab;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.BLACK3,
     borderRadius: 15,
     flex: 1,
     flexDirection: 'row',
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   readContainer: {
-    backgroundColor: colors.brightGray,
+    backgroundColor: colors.GRAY,
     borderRadius: 15,
     flex: 1,
     flexDirection: 'row',
@@ -69,11 +68,11 @@ const styles = StyleSheet.create({
   },
   nameContainer: {width: '100%'},
   notificationText: {
-    color: colors.THEME_BLACK,
+    color: colors.WHITE,
     fontSize: 16,
   },
   date: {
-    color: colors.textGray,
+    color: colors.THEME_WHITE,
     fontSize: 14,
     textAlign: 'right',
   },

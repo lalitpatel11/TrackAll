@@ -206,4 +206,8 @@ export const API = {
   POST_EDIT_ORGANIZATION_EMPLOYEE: DOMAIN + '/api/updateemployee',
   //web view section for payment
   GET_WEB_LINK_SUBSCRIPTION: DOMAIN + '/user/upgradeplan',
+  // privacy policy
+  GET_PRIVACY_POLICY: DOMAIN + '/privacypolicymobile',
+  // term and condition
+  GET_TERM_AND_CONDITION: DOMAIN + '/mobiletermsandcondition',
 };

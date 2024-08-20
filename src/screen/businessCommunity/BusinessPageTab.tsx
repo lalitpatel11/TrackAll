@@ -28,7 +28,6 @@ const BusinessPageTab = ({
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              resizeMode="contain"
               source={{uri: `${items?.businessimage}`}}
             />
           </View>
@@ -36,7 +35,6 @@ const BusinessPageTab = ({
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              resizeMode="contain"
               source={{uri: `${items?.communityimage}`}}
             />
           </View>
@@ -44,7 +42,6 @@ const BusinessPageTab = ({
           <View style={styles.noGroupImageContainer}>
             <View style={styles.noGroupImage}>
               <Image
-                resizeMode="contain"
                 style={styles.image}
                 source={require('../../assets/pngImage/noImage.png')}
               />

@@ -29,10 +29,35 @@ const SignUpOtp = (props: any) => {
   const [userEmail, setUserEmail] = useState('');
   const toastRef = useRef<any>();
   const [userType, setUserType] = useState(1);
+  const [timerCount, setTimerCount] = useState(30);
+  const [timeInterval, setTimeInterval] = useState(null);
 
   useEffect(() => {
     getUserData();
+    getTimer();
   }, []);
+
+  // show timer
+  const getTimer = () => {
+    setTimerCount(30);
+    if (timeInterval) {
+      clearInterval(timeInterval);
+      // setTimerCount(updatedData.timer);
+    }
+    let interval: any = setInterval(() => {
+      setTimerCount(lastTimerCount => {
+        lastTimerCount == 1 && clearInterval(interval);
+        return lastTimerCount - 1;
+      });
+    }, 1000);
+    setTimeInterval(interval);
+
+    return () => {
+      if (timeInterval) {
+        clearInterval(timeInterval);
+      }
+    };
+  };
 
   // function for get user details
   const getUserData = async () => {
@@ -50,6 +75,7 @@ const SignUpOtp = (props: any) => {
   // function for submit button click on api call to resend opt
   const handleResendOtp = async () => {
     setLoader(true);
+    getTimer();
     const data = {
       email: userEmail,
     };
@@ -155,17 +181,24 @@ const SignUpOtp = (props: any) => {
             <View style={styles.emailContainer}>
               <Text style={styles.emailText}>
                 {userEmail}
-                {otp}
+                {/* {otp} */}
               </Text>
-              <TouchableOpacity
-                style={styles.resendCodeContainer}
-                onPress={() => {
-                  handleResendOtp();
-                }}>
-                <Text style={styles.resendCodeText}>
-                  Resend Verification Code
-                </Text>
-              </TouchableOpacity>
+
+              {timerCount == 0 ? (
+                <TouchableOpacity
+                  style={styles.resendCodeContainer}
+                  onPress={() => {
+                    handleResendOtp();
+                  }}>
+                  <Text style={styles.resendCodeText}>
+                    Resend Verification Code
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.timerContainer}>
+                  <Text style={styles.timerText}>{timerCount}</Text>
+                </View>
+              )}
             </View>
 
             {/* Otp library */}
@@ -303,6 +336,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  timerContainer: {
+    height: 30,
+    width: 30,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: colors.THEME_ORANGE,
+    borderStyle: 'solid',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  timerText: {
+    color: colors.THEME_ORANGE,
+    fontSize: 14,
+    textAlign: 'center',
+  },
   resendCodeContainer: {
     alignSelf: 'center',
     width: 'auto',
@@ -332,7 +381,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 67,
   },
-  buttonContainer: {marginTop: 40},
+  buttonContainer: {
+    marginTop: 40,
+  },
   signInContainer: {
     alignSelf: 'center',
     flexDirection: 'row',

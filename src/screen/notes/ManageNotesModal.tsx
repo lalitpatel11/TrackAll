@@ -28,9 +28,9 @@ const ManageNotesModal = ({
 
   useEffect(() => {
     if (isEditingEnabled == 'true') {
-      setEditingEnabled(false);
-    } else if (isEditingEnabled == 'false') {
       setEditingEnabled(true);
+    } else if (isEditingEnabled == 'false') {
+      setEditingEnabled(false);
     }
   }, [visibleModal]);
 

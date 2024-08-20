@@ -214,7 +214,7 @@ const EditBudgetary = ({navigation, route}: {navigation: any; route: any}) => {
                 {allExpenseSubCategory?.length > 0 ? (
                   <>
                     <View style={styles.textDirection}>
-                      <Text style={styles.labelText}>Expense Categories</Text>
+                      <Text style={styles.labelText}>Sub Categories</Text>
                     </View>
 
                     {/* sub category tab section  */}

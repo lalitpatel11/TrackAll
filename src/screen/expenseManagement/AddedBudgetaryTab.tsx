@@ -77,7 +77,7 @@ const AddedBudgetaryTab = ({
         </View>
 
         <View>
-          <Text style={styles.categoryLabel}>Expense Categories</Text>
+          <Text style={styles.categoryLabel}>Sub Categories</Text>
           <Text style={styles.categoryText}>{items.subcategoryname}</Text>
         </View>
       </View>

@@ -115,7 +115,9 @@ const MyAllBusinessListTab = ({
         {items?.website != null ? (
           <View style={styles.direction}>
             <Text style={styles.labelText}>Website: </Text>
-            <Text style={styles.nameText}>{items?.website}</Text>
+            <Text style={styles.nameText}>
+              {items?.website ? items?.website : 'N/A'}
+            </Text>
           </View>
         ) : null}
 

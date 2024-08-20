@@ -49,11 +49,6 @@ const OrganizationExpenseManagement = ({navigation}: {navigation: any}) => {
     setBarData([]);
   };
 
-  // function for open side menu
-  const handleOpenDrawer = () => {
-    navigation.openDrawer();
-  };
-
   // function for get all expense data on api call
   const getData = async () => {
     OrganizationService.postOrganizationExpanseManagementHome()
@@ -95,7 +90,7 @@ const OrganizationExpenseManagement = ({navigation}: {navigation: any}) => {
 
   // function for get all budget data on api call
   const getBudgetaryData = async () => {
-    OrganizationService.postListOrganizationBudgetaryRestriction(body)
+    OrganizationService.postListOrganizationBudgetaryRestriction()
       .then((response: any) => {
         setPageLoader(false);
         setBudgetaryRestriction(response?.data?.budgetaryrestrication);
@@ -432,7 +427,7 @@ const styles = StyleSheet.create({
   createIconContainer: {
     bottom: 30,
     position: 'absolute',
-    right: 40,
+    right: 0,
     zIndex: 1,
   },
   graphLabelContainer: {

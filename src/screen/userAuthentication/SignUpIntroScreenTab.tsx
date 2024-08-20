@@ -1,6 +1,6 @@
 //external imports
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 //internal imports
 import {colors} from '../../constants/ColorConstant';
 
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
-    height: 855,
-    width: 395,
+    height: Dimensions.get('screen').height,
+    width: Dimensions.get('screen').width,
   },
   darkBackgroundImage: {
     height: '100%',

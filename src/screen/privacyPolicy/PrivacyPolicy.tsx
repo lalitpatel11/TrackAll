@@ -1,7 +1,9 @@
 //external imports
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 //internal imports
+import WebView from 'react-native-webview';
+import {API} from '../../service/api/ApiDetails';
 import CustomHeader from '../../constants/CustomHeader';
 import {colors} from '../../constants/ColorConstant';
 
@@ -18,55 +20,13 @@ const PrivacyPolicy = (props: any) => {
           },
         }}
       />
-
-      {/* body section */}
-      <View style={styles.body}>
-        <ScrollView>
-          <Text style={styles.textStyle}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. {'\n\n'}Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. {'\n\n'}Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. {'\n\n'}Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. {'\n\n'}Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. {'\n\n'}Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
-          </Text>
-        </ScrollView>
+      <View style={styles.webViewStyle}>
+        <WebView
+          source={{
+            uri: `${API.GET_PRIVACY_POLICY}`,
+          }}
+          contentMode="mobile"
+        />
       </View>
     </View>
   );
@@ -79,11 +39,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.BLACK,
     flex: 1,
   },
-  body: {
-    padding: 15,
-  },
-  textStyle: {
-    color: colors.WHITE,
-    textAlign: 'justify',
+  webViewStyle: {
+    marginTop: '25%',
+    height: '90%',
+    position: 'absolute',
+    width: '100%',
+    zIndex: 999,
   },
 });

@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import React, {useEffect, useRef, useState} from 'react';
 // internal imports
 import CustomHeader from '../../constants/CustomHeader';
@@ -273,11 +272,7 @@ const GoalTracker = ({navigation}: {navigation: any}) => {
       )}
 
       {/* create notes icon  */}
-      <LinearGradient
-        colors={['#ED933C', '#E15132']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        style={styles.createIconContainer}>
+      <View style={styles.createIconContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('StackNavigation', {
@@ -290,7 +285,7 @@ const GoalTracker = ({navigation}: {navigation: any}) => {
             source={require('../../assets/pngImage/Plus.png')}
           />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* Delete alert modal for goal mark complete */}
       <DeleteAlertModal
@@ -377,18 +372,19 @@ const styles = StyleSheet.create({
   },
   createIconContainer: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
-    borderRadius: 50,
-    bottom: 50,
+    backgroundColor: colors.THEME_ORANGE,
+    borderRadius: 100,
+    bottom: 60,
     height: 60,
     justifyContent: 'center',
+    padding: 20,
     position: 'absolute',
-    right: 10,
+    right: 25,
     width: 60,
     zIndex: 1,
   },
   createIconImage: {
-    borderRadius: 50,
+    borderRadius: 100,
     height: 25,
     width: 25,
   },

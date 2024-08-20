@@ -530,7 +530,7 @@ PODS:
     - React-Core
   - react-native-geolocation-service (5.3.1):
     - React
-  - react-native-maps (1.15.6):
+  - react-native-maps (1.7.1):
     - React-Core
   - react-native-month-year-picker (1.9.0):
     - React
@@ -1019,7 +1019,7 @@ SPEC CHECKSUMS:
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
   react-native-date-picker: 312c387d2ff873c66c5e4cf78ff6827fa91644e2
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
-  react-native-maps: 7b2c2cee95271592a92ba485eea1dec66a363a6e
+  react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-month-year-picker: 948797e981ca502427024a34b17f545eb321bbff
   react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371

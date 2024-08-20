@@ -34,6 +34,7 @@ import {
   requestSubscription,
   SubscriptionPurchase,
 } from 'react-native-iap';
+import CancelSubsIos from '../../modals/CancelSubsIos/CancelSubsIos';
 
 const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
   //variables
@@ -53,7 +54,8 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
   const [myUserId, setMyUserId] = useState<any>();
   const [planId, setPlanId] = useState('');
   const [webViewModal, setWebViewModal] = useState(false);
-  //function : imp functio
+  const [showCancelSub, setShowCancelSub] = useState(false);
+  //function : imp function
   useEffect(() => {
     let purchaseUpdateSubscription = null;
     let purchaseErrorSubscription = null;
@@ -83,6 +85,7 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
       purchaseErrorSubscription = null;
     };
   }, []);
+
   const fetchProducts = async () => {
     try {
       const products = await getSubscriptions({
@@ -148,7 +151,20 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={() => handleSubmitButtonClick(item)}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
@@ -159,7 +175,20 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={() => handleSubmitButtonClick(item)}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
@@ -273,7 +302,11 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
               {mySubscriptionPlan?.price !== '$0/Month' ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setDeleteModal(true);
+                    if (Platform.OS === 'android') {
+                      setDeleteModal(true);
+                    } else {
+                      setShowCancelSub(true);
+                    }
                   }}
                   style={styles.cancelButtonContainer}>
                   <Text style={styles.cancelButtonText}>
@@ -393,6 +426,7 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
 
       {/* toaster message for error response from API */}
       <CommonToast ref={toastRef} />
+      <CancelSubsIos visible={showCancelSub} setVisibility={setShowCancelSub} />
     </View>
   );
 };

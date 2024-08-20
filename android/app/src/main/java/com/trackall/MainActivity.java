@@ -1,4 +1,4 @@
-package com.trackall;
+package com.trackallapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

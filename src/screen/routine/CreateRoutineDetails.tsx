@@ -163,7 +163,13 @@ const CreateRoutineDetails = ({
       setErrMsg(false);
 
       const feedBackData = new FormData();
-      feedBackData.append('businessid', route?.params?.businessId);
+      if (route?.params?.businessId > 0) {
+        feedBackData.append('businessid', route?.params?.businessId);
+      }
+
+      if (route?.params?.groupId != null || route?.params?.groupId != '') {
+        feedBackData.append('group_id', route?.params?.groupId);
+      }
       feedBackData.append('name', values.title);
       feedBackData.append('subtitle', values.subTitle);
       feedBackData.append('description', values.description);
@@ -183,6 +189,7 @@ const CreateRoutineDetails = ({
       selectedMembersId.map((e: number, index: any) => {
         feedBackData.append(`member[${index}]`, e);
       });
+
       GroupServices.postCreateTask(feedBackData)
         .then((response: any) => {
           setButtonLoader(false);

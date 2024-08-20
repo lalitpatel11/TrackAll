@@ -34,21 +34,31 @@ const AllGoals = ({navigation}: {navigation: any}) => {
     const accountId = await AsyncStorage.getItem('accountId');
     const userType = await AsyncStorage.getItem('userType');
 
-    const data = new FormData();
-
     if (userType == '2') {
-      data.append('accountId', accountId);
-    }
+      const body = {
+        accountId: accountId,
+      };
 
-    GoalTrackerService.getAllGoal(data)
-      .then((response: any) => {
-        setPageLoader(false);
-        setGoals(response.data.goals);
-      })
-      .catch((error: any) => {
-        setPageLoader(false);
-        console.log(error);
-      });
+      GoalTrackerService.getAllGoal(body)
+        .then((response: any) => {
+          setPageLoader(false);
+          setGoals(response.data.goals);
+        })
+        .catch((error: any) => {
+          setPageLoader(false);
+          console.log(error);
+        });
+    } else {
+      GoalTrackerService.getAllGoal()
+        .then((response: any) => {
+          setPageLoader(false);
+          setGoals(response.data.goals);
+        })
+        .catch((error: any) => {
+          setPageLoader(false);
+          console.log(error);
+        });
+    }
   };
 
   // function for search all community data on api call

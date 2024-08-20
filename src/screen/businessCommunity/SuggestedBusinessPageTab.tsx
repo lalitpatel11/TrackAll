@@ -27,7 +27,6 @@ const SuggestedBusinessPageTab = ({
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            resizeMode="contain"
             source={{uri: `${items?.businessimage}`}}
           />
         </View>
@@ -35,7 +34,6 @@ const SuggestedBusinessPageTab = ({
         <View style={styles.noGroupImageContainer}>
           <View style={styles.noGroupImage}>
             <Image
-              resizeMode="contain"
               style={styles.image}
               source={require('../../assets/pngImage/noImage.png')}
             />
@@ -44,7 +42,9 @@ const SuggestedBusinessPageTab = ({
       )}
 
       <View style={styles.amountContainer}>
-        <Text style={styles.pageName}>{items?.name}</Text>
+        <Text numberOfLines={1} style={styles.pageName}>
+          {items?.name}
+        </Text>
         <Text style={styles.followerText}>{items?.totalfollow} Followers</Text>
       </View>
     </TouchableOpacity>

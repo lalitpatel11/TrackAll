@@ -24,6 +24,7 @@ import ManageGroupModal from './ManageGroupModal';
 import RecentlyAddedMembersTab from './RecentlyAddedMembersTab';
 import RemoveGroupMemberModal from './RemoveGroupMemberModal';
 import {colors} from '../../constants/ColorConstant';
+import AddTaskNotesRoutineButton from './AddTaskNotesRoutineButton';
 
 const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
   const [allTask, setAllTask] = useState([]);
@@ -35,6 +36,7 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
   const [manageGroupModal, setManageGroupModal] = useState(false);
   const [memberIdModal, setMemberIdModal] = useState(false);
   const [myUserId, setMyUserId] = useState<any>();
+  const [userType, setUserType] = useState('1');
   const [pageLoader, setPageLoader] = useState(false);
   const [recentlyAddedMemberList, setRecentlyAddedMemberList] = useState([]);
   const [recentlyMemberLoader, setRecentlyMemberLoader] = useState(false);
@@ -72,7 +74,9 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
 
   // function for get group details on api call
   const getAllDetails = async () => {
-    // user id for edit group name by owner only
+    // user id  and type for edit group name by owner only
+    const userType = await AsyncStorage.getItem('userType');
+    setUserType(userType);
     const token = await AsyncStorage.getItem('userId');
     setMyUserId(token);
 
@@ -179,51 +183,48 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
 
   // function for submit button click on api call to add member on group
   const handleMemberIdAddClick = (memberList: number[]) => {
-    if (memberList?.length > 0) {
-      setMemberIdModal(false);
-      setRecentlyMemberLoader(true);
+    setMemberIdModal(false);
+    setRecentlyMemberLoader(true);
 
-      const feedBackData = new FormData();
-      feedBackData.append('group_id', groupId);
-      memberList.map((e: number, index: any) => {
-        feedBackData.append(`user_id[${index}]`, e);
+    const feedBackData = new FormData();
+    feedBackData.append('group_id', groupId);
+    memberList.map((e: number, index: any) => {
+      feedBackData.append(`user_id[${index}]`, e);
+    });
+
+    GroupServices.postAddMembers(feedBackData)
+      .then((response: any) => {
+        toastRef.current.getToast(response.data.message, 'success');
+        getRecentlyAddMembers(); // refresh the member list
+        getAllDetails(); // refresh the page for member count
+      })
+      .catch((error: any) => {
+        setRecentlyMemberLoader(false);
+        console.log('error', JSON.stringify(error));
       });
-
-      GroupServices.postAddMembers(feedBackData)
-        .then((response: any) => {
-          toastRef.current.getToast(response.data.message, 'success');
-          getRecentlyAddMembers(); // refresh the member list
-          getAllDetails(); // refresh the page for member count
-        })
-        .catch((error: any) => {
-          setRecentlyMemberLoader(false);
-          console.log('error', JSON.stringify(error));
-        });
-    }
   };
 
   // function for submit button click on api call to remove members from group
   const handleRemoveMemberIdSubmitClick = (memberList: number[]) => {
     Keyboard.dismiss();
-    if (memberList?.length > 0) {
-      setRemoveMemberIdModal(false);
-      const data = new FormData();
-      data.append('groupid', groupId);
-      memberList.map((e: number, index: any) => {
-        data.append(`deletemembers[${index}]`, e);
-      });
 
-      GroupServices.postGroupMembersDelete(data)
-        .then((response: any) => {
-          toastRef.current.getToast(response.data.message, 'success');
-          getRecentlyAddMembers(); // refresh the member list
-          getAllDetails(); // refresh the page for member count
-        })
-        .catch((error: any) => {
-          setRecentlyMemberLoader(false);
-          console.log('error', JSON.stringify(error));
-        });
-    }
+    setRemoveMemberIdModal(false);
+    const data = new FormData();
+    data.append('groupid', groupId);
+    memberList.map((e: number, index: any) => {
+      data.append(`deletemembers[${index}]`, e);
+    });
+
+    GroupServices.postGroupMembersDelete(data)
+      .then((response: any) => {
+        toastRef.current.getToast(response.data.message, 'success');
+        getRecentlyAddMembers(); // refresh the member list
+        getAllDetails(); // refresh the page for member count
+      })
+      .catch((error: any) => {
+        setRecentlyMemberLoader(false);
+        console.log('error', JSON.stringify(error));
+      });
   };
 
   // list for added task
@@ -256,6 +257,11 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
         ? navigation.navigate('StackNavigation', {
             screen: 'NotesDetails',
             params: {id: taskData?.id},
+          })
+        : taskData?.task_type === 'A'
+        ? navigation.navigate('StackNavigation', {
+            screen: 'AppointmentDetail',
+            params: {data: taskData?.id},
           })
         : null;
     }
@@ -357,7 +363,7 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
                   }}>
                   <Image
                     resizeMode="contain"
-                    style={{height: 15, width: 15}}
+                    style={{height: 18, width: 18}}
                     source={require('../../assets/pngImage/editIcon.png')}
                   />
                 </TouchableOpacity>
@@ -379,10 +385,12 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
                   style={styles.addMembersContainer}>
                   <Image
                     resizeMode="contain"
-                    style={{height: 20, width: 20}}
+                    style={styles.icon}
                     source={require('../../assets/pngImage/UserPlus.png')}
                   />
+
                   <Text style={styles.addMemberText}>Add Members</Text>
+                  {/* {userType == '3' ? 'Add Employee' : 'Add Members'} */}
                 </TouchableOpacity>
               ) : null}
             </View>
@@ -392,7 +400,7 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
               <View style={styles.groupImageContainer}>
                 <Image
                   style={styles.image}
-                  resizeMode="contain"
+                  resizeMode="cover"
                   source={{uri: `${groupDetails?.groupimage}`}}
                 />
               </View>
@@ -401,7 +409,7 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
                 <View style={styles.noGroupImage}>
                   <Image
                     style={{width: '100%', height: '100%'}}
-                    resizeMode="contain"
+                    resizeMode="cover"
                     source={require('../../assets/pngImage/noImage.png')}
                   />
                 </View>
@@ -442,7 +450,7 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
             )
           ) : (
             <View style={styles.noMembersContainer}>
-              <Text style={styles.noMembersText}>No Members Added</Text>
+              <Text style={styles.noMembersText}>No members added</Text>
             </View>
           )}
 
@@ -450,15 +458,21 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
           <View style={styles.textDirection}>
             <Text style={styles.preferenceText}>Tasks</Text>
 
-            {/* add new task basis of user id match*/}
-            {/* {groupDetails?.groupCreatedBy == myUserId ? ( */}
-            <TouchableOpacity
-              onPress={() => {
-                handleAddNewTask();
-              }}>
-              <Text style={styles.addEditText}>Add New Task</Text>
-            </TouchableOpacity>
-            {/* ) : null} */}
+            {/* add task option based on user type  */}
+            {userType == '1' ? (
+              <>
+                {/* add new task basis of user id match*/}
+                {groupDetails?.groupCreatedBy == myUserId &&
+                groupDetails?.is_edit == 'false' ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleAddNewTask();
+                    }}>
+                    <Text style={styles.addEditText}>Add New Task</Text>
+                  </TouchableOpacity>
+                ) : null}
+              </>
+            ) : null}
           </View>
 
           {allTask?.length > 0 ? (
@@ -476,10 +490,24 @@ const GroupDetails = ({route, navigation}: {route: any; navigation: any}) => {
           ) : (
             <View style={styles.noDataContainer}>
               <Text style={styles.noDataText}>
-                No Task Added Here. {'\n'}Click on the "Add New Task" to create
+                No task added here. {'\n'}Click on the "Add New Task" to create
                 a task.
               </Text>
             </View>
+          )}
+
+          {/* create task notes and routine icon  */}
+          {userType == '1' ? null : (
+            <>
+              {groupDetails?.is_edit == 'false' ? (
+                <View style={styles.createIconContainer}>
+                  <AddTaskNotesRoutineButton
+                    navigation={navigation}
+                    groupId={groupId}
+                  />
+                </View>
+              ) : null}
+            </>
           )}
 
           {/* edit group name  */}
@@ -687,5 +715,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     padding: 20,
+  },
+  createIconContainer: {
+    alignItems: 'center',
+    borderRadius: 100,
+    bottom: 60,
+    height: 60,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: -20,
+    width: 60,
+    zIndex: 1,
+  },
+  createIconImage: {
+    borderRadius: 100,
+    height: 25,
+    width: 25,
+  },
+  icon: {
+    height: 20,
+    width: 20,
+    tintColor: colors.THEME_ORANGE,
   },
 });

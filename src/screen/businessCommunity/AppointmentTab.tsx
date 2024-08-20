@@ -71,7 +71,7 @@ export default AppointmentTab;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.BLACK3,
     borderRadius: 15,
     flex: 1,
     marginVertical: 5,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   userName: {
-    color: colors.THEME_BLACK,
+    color: colors.WHITE,
     fontSize: 14,
     fontWeight: '500',
     width: '75%',

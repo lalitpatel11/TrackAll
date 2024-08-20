@@ -28,10 +28,13 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
   const [pageLoader, setPageLoader] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const toastRef = useRef<any>();
-
+  const crntMonth = useRef(moment().month() + 1);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setPageLoader(true);
+
+      console.log();
+
       getData(currentMonth, currentYear);
 
       if (moment().month() == 0) {
@@ -70,14 +73,17 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
 
   // function for get all task data on api call
   const getData = async (currentMonth: any, currentYear: any) => {
+    console.log('currentMonth', currentMonth);
+
     setPageLoader(true);
     const body = {
       month: currentMonth,
       year: currentYear,
     };
-
     OrganizationService.postAppointmentOnCalendar(body)
       .then((response: any) => {
+        console.log('RESPONSE', response.data);
+
         setPageLoader(false);
         setBusinessDetails(response?.data?.business);
         setMonthWiseAppointmentData(response?.data?.monthwiseappointmentdata);
@@ -248,8 +254,8 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
                     <View style={styles.nextBtn}>
                       <Image
                         resizeMode="contain"
-                        tintColor={colors.THEME_ORANGE}
                         style={styles.nextImg}
+                        tintColor={colors.THEME_ORANGE}
                         source={require('../../../assets/pngImage/rightarrow.png')}
                       />
                     </View>
@@ -259,8 +265,8 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
                     <View style={styles.previousBtn}>
                       <Image
                         resizeMode="contain"
-                        tintColor={colors.THEME_ORANGE}
                         style={styles.previousImg}
+                        tintColor={colors.THEME_ORANGE}
                         source={require('../../../assets/pngImage/leftarrow.png')}
                       />
                     </View>
@@ -275,10 +281,16 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
                   yearTitleStyle={styles.year}
                   onMonthChange={(data: any) => {
                     console.log('Changes', data);
-                    getData(
-                      moment(new Date(data)).format('MM'),
-                      moment(new Date(data)).format('YYYY'),
+                    setCurrentMonth(
+                      Number(moment(new Date(data)).format('MM')),
                     );
+                    setCurrentYear(
+                      Number(moment(new Date(data)).format('YYYY')),
+                    );
+                    // getData(
+                    //   moment(new Date(data)).format('MM'),
+                    //   moment(new Date(data)).format('YYYY'),
+                    // );
                   }}
                 />
               </View>
@@ -305,9 +317,7 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
       )}
 
       {/* create notes icon  */}
-      <LinearGradient
-        colors={['#F28520', '#F5BD35']}
-        style={styles.createIconContainer}>
+      <View style={styles.createIconContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('StackNavigation', {
@@ -320,7 +330,7 @@ const OrganizationScheduleManagement = ({navigation}: {navigation: any}) => {
             source={require('../../../assets/pngImage/Plus.png')}
           />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* toaster message for error response from API */}
       <CommonToast ref={toastRef} />
@@ -471,7 +481,7 @@ const styles = StyleSheet.create({
   },
   createIconContainer: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.THEME_ORANGE,
     borderRadius: 100,
     bottom: 60,
     height: 60,

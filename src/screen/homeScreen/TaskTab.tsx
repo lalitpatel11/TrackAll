@@ -80,7 +80,7 @@ const TaskTab = ({
               <View style={styles.direction}>
                 <Text style={styles.groupText}>Group </Text>
                 <View style={styles.dotContainer} />
-                <Text style={styles.taskTitle}> {data?.groupname}</Text>
+                <Text style={styles.groupTitle}> {data?.groupname}</Text>
               </View>
             ) : null}
           </View>
@@ -173,7 +173,7 @@ const TaskTab = ({
               <View style={styles.direction}>
                 <Text style={styles.groupText}>Group </Text>
                 <View style={styles.dotContainer} />
-                <Text style={styles.taskTitle}> {data?.groupname}</Text>
+                <Text style={styles.groupTitle}> {data?.groupname}</Text>
               </View>
             ) : null}
           </View>
@@ -245,6 +245,13 @@ const styles = StyleSheet.create({
     color: colors.THEME_ORANGE,
     fontSize: 14,
     fontWeight: '500',
+    width: '85%',
+  },
+  groupTitle: {
+    color: colors.THEME_ORANGE,
+    fontSize: 14,
+    fontWeight: '500',
+    width: '65%',
   },
   direction: {
     alignItems: 'center',

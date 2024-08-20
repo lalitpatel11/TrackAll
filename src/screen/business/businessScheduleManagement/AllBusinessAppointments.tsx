@@ -169,7 +169,7 @@ const AllBusinessAppointments = ({
           <View style={styles.body}>
             <View style={styles.appointmentContainer} />
             <EventCalendar
-              // scrollEnabled={false}
+              scrollEnabled={true}
               eventTapped={appointmentClicked} // Function on event press
               events={allAppointments} // Passing the Array of event
               width={width} // Container width
@@ -178,7 +178,7 @@ const AllBusinessAppointments = ({
                 return (
                   <View style={styles.appointmentBox}>
                     <TouchableOpacity
-                      style={{width: '100%', alignSelf: 'center'}}
+                      style={{alignSelf: 'center'}}
                       onPress={() => {
                         handleAppointmentClicked(data?.id);
                       }}>

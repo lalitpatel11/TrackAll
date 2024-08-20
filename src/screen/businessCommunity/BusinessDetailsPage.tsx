@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     paddingHorizontal: 5,
-    width: '76%',
+    width: '75%',
   },
   pageName: {
     color: colors.WHITE,
@@ -965,7 +965,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 46,
     justifyContent: 'center',
-    width: 180,
+    width: '50%',
   },
   buttonText: {
     color: colors.WHITE,
@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     justifyContent: 'center',
-    width: 180,
+    width: '50%',
   },
   disableButtonText: {
     color: colors.WHITE,
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
   createIconContainer: {
     bottom: 30,
     position: 'absolute',
-    right: 40,
+    right: 10,
     zIndex: 1,
   },
   createIconContainerDisable: {

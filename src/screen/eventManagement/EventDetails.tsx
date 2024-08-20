@@ -572,7 +572,10 @@ const EventDetails = ({navigation, route}: {navigation: any; route: any}) => {
                           Contact Number
                         </Text>
                         <Text style={styles.dateText}>
-                          {eventDetails?.contactno}
+                          {eventDetails?.contactno.replace(
+                            /(\d{3})(\d{3})(\d{4})/,
+                            '$1-$2-$3',
+                          )}
                         </Text>
                       </View>
                     </View>

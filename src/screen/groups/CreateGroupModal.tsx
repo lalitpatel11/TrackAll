@@ -12,14 +12,11 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Formik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 //internal imports
 import CameraGalleryModal from '../groups/CameraGalleryModal';
-import CommonToast from '../../constants/CommonToast';
-import GroupServices from '../../service/GroupServices';
-import PlanPurchaseModal from './PlanPurchaseModal';
 import SubmitButton from '../../constants/SubmitButton';
 import {colors} from '../../constants/ColorConstant';
 import {name} from '../../constants/SchemaValidation';
@@ -30,18 +27,16 @@ const CreateGroupModal = ({
   onClose,
   onCreateClick,
   visibleModal,
+  loader,
 }: {
   navigation: any;
   onClose: Function;
   onCreateClick: Function;
   visibleModal: boolean;
+  loader: boolean;
 }) => {
   const [cameraGalleryModal, setCameraGalleryModal] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [planPurchaseVisible, setPlanPurchaseVisible] = useState(false);
   const [profileImage, setProfileImage] = useState('');
-  const [responseMsg, setResponseMsg] = useState('');
-  const toastRef = useRef<any>();
 
   useEffect(() => {
     setProfileImage('');
@@ -90,14 +85,6 @@ const CreateGroupModal = ({
     }
   };
 
-  // navigation for subscription plan on click of purchase plan click
-  const handlePlanPurchaseSubmitClick = () => {
-    setPlanPurchaseVisible(false);
-    navigation.navigate('StackNavigation', {
-      screen: 'SubscriptionPlan',
-    });
-  };
-
   // function for submit button click on api call to create group
   const onSubmit = async (values: any) => {
     Keyboard.dismiss();
@@ -122,23 +109,7 @@ const CreateGroupModal = ({
       data.append('accountId', accountId);
     }
 
-    setLoader(true);
-    GroupServices.postCreateGroup(data)
-      .then((response: any) => {
-        setLoader(false);
-        if (response.data.status === 1) {
-          onCreateClick(response.data.group);
-          setResponseMsg(response.data.message);
-          setPlanPurchaseVisible(false);
-        } else if (response.data.status === 0) {
-          setPlanPurchaseVisible(true);
-          setResponseMsg(response.data.message);
-        }
-      })
-      .catch((error: any) => {
-        setLoader(false);
-        console.log(error, 'error');
-      });
+    onCreateClick(data);
   };
 
   const initialValues = {
@@ -271,19 +242,6 @@ const CreateGroupModal = ({
           cameraClick={openCamera}
           galleryClick={openLibrary}
         />
-
-        {/* Modal for purchase plan*/}
-        <PlanPurchaseModal
-          visibleModal={planPurchaseVisible}
-          onClose={() => {
-            setPlanPurchaseVisible(false);
-          }}
-          responseMsg={responseMsg}
-          onSubmitClick={handlePlanPurchaseSubmitClick}
-        />
-
-        {/* toaster message for error response from API  */}
-        <CommonToast ref={toastRef} />
       </KeyboardAwareScrollView>
     </KeyboardAvoidingView>
   );

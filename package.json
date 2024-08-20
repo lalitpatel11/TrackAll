@@ -8,9 +8,9 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "releaseIos": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios-react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios-",
+    "releaseios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios-react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios-",
     "androidRelease": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-    "removeAndroidDrawable": "rm -rf ./android/app/src/main/res/drawable-*",
+    "removeAndroidDrwable": "rm -rf ./android/app/src/main/res/drawable-*",
     "removeAndroidRaw": "rm -rf ./android/app/src/main/res/raw",
     "AndroidBuild": "cd android && ./gradlew clean && ./gradlew assembleRelease"
   },

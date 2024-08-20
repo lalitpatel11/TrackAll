@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   createIconContainer: {
     bottom: 30,
     position: 'absolute',
-    right: 40,
+    right: 0,
     zIndex: 1,
   },
   loaderContainer: {

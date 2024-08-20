@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
   headerText: {
     color: colors.WHITE,
     fontSize: 16,
-    marginLeft: 15,
+    marginLeft: 90,
   },
 });

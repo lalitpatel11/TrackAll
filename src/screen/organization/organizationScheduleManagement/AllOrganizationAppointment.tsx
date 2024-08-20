@@ -156,77 +156,68 @@ const AllOrganizationAppointment = ({
 
       {/* body section */}
       {!pageLoader ? (
-        <SafeAreaView style={styles.container}>
-          <ScrollView nestedScrollEnabled={true}>
-            {/* package */}
-            <View style={styles.body}>
-              <View style={styles.appointmentContainer} />
-              <EventCalendar
-                eventTapped={appointmentClicked} // Function on event press
-                events={allAppointments} // Passing the Array of event
-                width={width} // Container width
-                size={60}
-                renderEvent={(data: any) => {
-                  return (
-                    <View style={styles.appointmentBox}>
-                      <TouchableOpacity
-                        style={{width: '100%', alignSelf: 'center'}}
-                        onPress={() => {
-                          handleAppointmentClicked(data?.id);
-                        }}>
-                        {/* group name */}
-                        {data?.groupname ? (
-                          <View style={styles.direction}>
-                            <Text style={styles.titleText}>Group Name: </Text>
-                            <Text style={styles.descriptionText}>
-                              {data?.groupname}
-                            </Text>
-                          </View>
-                        ) : null}
+        <View style={styles.body}>
+          <View style={styles.appointmentContainer} />
+          <EventCalendar
+            eventTapped={appointmentClicked} // Function on event press
+            events={allAppointments} // Passing the Array of event
+            width={width} // Container width
+            size={60}
+            renderEvent={(data: any) => {
+              return (
+                <View style={styles.appointmentBox}>
+                  <TouchableOpacity
+                    style={{width: '100%', alignSelf: 'center'}}
+                    onPress={() => {
+                      handleAppointmentClicked(data?.id);
+                    }}>
+                    {/* group name */}
+                    {data?.groupname ? (
+                      <View style={styles.direction}>
+                        <Text style={styles.titleText}>Group Name: </Text>
+                        <Text style={styles.descriptionText}>
+                          {data?.groupname}
+                        </Text>
+                      </View>
+                    ) : null}
 
-                        {/* requested by name */}
-                        {data?.requestedby ? (
-                          <View style={styles.direction}>
-                            <Text style={styles.titleText}>Requested By: </Text>
-                            <Text style={styles.descriptionText}>
-                              {data?.requestedby}
-                            </Text>
-                          </View>
-                        ) : null}
+                    {/* requested by name */}
+                    {data?.requestedby ? (
+                      <View style={styles.direction}>
+                        <Text style={styles.titleText}>Requested By: </Text>
+                        <Text style={styles.descriptionText}>
+                          {data?.requestedby}
+                        </Text>
+                      </View>
+                    ) : null}
 
-                        {/* group title */}
-                        <View style={styles.direction}>
-                          <Text style={styles.titleText}>Title: </Text>
-                          <Text style={styles.descriptionText}>
-                            {data?.title}
-                          </Text>
-                        </View>
-
-                        {/* group description */}
-                        <View style={styles.direction}>
-                          <Text style={styles.titleText}>Description: </Text>
-                          <Text style={styles.descriptionText}>
-                            {data?.description}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                    {/* group title */}
+                    <View style={styles.direction}>
+                      <Text style={styles.titleText}>Title: </Text>
+                      <Text style={styles.descriptionText}>{data?.title}</Text>
                     </View>
-                  );
-                }}
-                scrollToFirst
-              />
-            </View>
 
-            {/* Calender modal */}
-            <CalendarModal
-              visibleModal={calendarModal}
-              onClose={() => {
-                setCalendarModal(false);
-              }}
-              onSubmitClick={handleCalendarSubmitClick}
-            />
-          </ScrollView>
-        </SafeAreaView>
+                    {/* group description */}
+                    <View style={styles.direction}>
+                      <Text style={styles.titleText}>Description: </Text>
+                      <Text style={styles.descriptionText}>
+                        {data?.description}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            scrollToFirst
+          />
+          <CalendarModal
+            visibleModal={calendarModal}
+            onClose={() => {
+              setCalendarModal(false);
+            }}
+            onSubmitClick={handleCalendarSubmitClick}
+          />
+        </View>
       ) : (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color={colors.THEME_ORANGE} />

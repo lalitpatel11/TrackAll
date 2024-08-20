@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import React, {useEffect, useState} from 'react';
 // internal imports
 import CustomHeader from '../../constants/CustomHeader';
@@ -553,9 +552,7 @@ const Notes = ({navigation}: {navigation: any}) => {
       )}
 
       {/* create notes icon  */}
-      <LinearGradient
-        colors={['#F28520', '#F5BD35']}
-        style={styles.createIconContainer}>
+      <View style={styles.createIconContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('StackNavigation', {
@@ -568,7 +565,7 @@ const Notes = ({navigation}: {navigation: any}) => {
             source={require('../../assets/pngImage/Plus.png')}
           />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* Share Routine Modal */}
       <ShareNotesModal
@@ -643,7 +640,7 @@ const styles = StyleSheet.create({
   },
   createIconContainer: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.THEME_ORANGE,
     borderRadius: 100,
     bottom: 60,
     height: 60,

@@ -25,6 +25,8 @@ import GroupTab from './GroupTab';
 import HomeScreenService from '../../service/HomeScreenService';
 import TaskTab from './TaskTab';
 import {colors} from '../../constants/ColorConstant';
+import EventService from '../../service/EventService';
+import EventTab from '../eventManagement/EventTab';
 
 const Home = ({navigation}: {navigation: any}) => {
   const [eventCount, setEventCount] = useState(0);
@@ -41,6 +43,8 @@ const Home = ({navigation}: {navigation: any}) => {
   const [scheduleId, setScheduleId] = useState('');
   const [unHideTaskList, setUnHideTaskList] = useState([]);
   const [upComingExpenses, setUpComingExpenses] = useState([]);
+  const [upComingEvent, setUpComingEvent] = useState<any[]>([]);
+
   const toastRef = useRef<any>();
   const [selectedDate, setSelectedDate] = useState(
     moment(new Date()).format('YYYY-MM-DD'),
@@ -137,6 +141,7 @@ const Home = ({navigation}: {navigation: any}) => {
       .then((response: any) => {
         // for all incoming expenses
         setUpComingExpenses(response?.data?.allupcommingexpenses);
+        setUpComingEvent(response?.data?.upcomingEvent);
         // for all un hide tasks
         var newArray = response.data.tasks.filter((e: any) => {
           {
@@ -315,6 +320,60 @@ const Home = ({navigation}: {navigation: any}) => {
         onRefresh={getData}
       />
     );
+  };
+
+  // list for event tab
+  const renderEventList = ({item}: {item: any; index: any}) => {
+    return (
+      <EventTab
+        item={item}
+        handleView={handleViewPage}
+        onLikeClick={handleLike}
+        onUnLikeClick={handleUnLike}
+        getData={() => {
+          getData();
+        }}
+        navigation={navigation}
+      />
+    );
+  };
+
+  // navigation for event details
+  const handleViewPage = (id: any) => {
+    navigation.navigate('StackNavigation', {
+      screen: 'EventDetails',
+      params: {id: id},
+    });
+  };
+
+  // function for api call on like click
+  const handleLike = (id: number) => {
+    const data = {
+      eventid: id,
+      status: 1,
+    };
+    EventService.postLikeUnlikeEvent(data)
+      .then((response: any) => {
+        getData();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  // function for api call on unlike click
+  const handleUnLike = (id: number) => {
+    const data = {
+      eventid: id,
+      status: 0,
+    };
+    EventService.postLikeUnlikeEvent(data)
+      .then((response: any) => {
+        getData();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
@@ -496,6 +555,39 @@ const Home = ({navigation}: {navigation: any}) => {
                 )}
               </>
             )}
+
+            {/*all upcoming events */}
+            <View style={styles.textDirection}>
+              <Text style={styles.labelText}>Events</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('StackNavigation', {
+                    screen: 'EventManagement',
+                  });
+                }}>
+                {upComingEvent?.length > 0 ? (
+                  <Text style={styles.addEditText}>View All</Text>
+                ) : null}
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flex: 1, marginHorizontal: 3}}>
+              {upComingEvent?.length > 0 ? (
+                <View style={styles.eventContainer}>
+                  <FlatList
+                    data={upComingEvent}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderEventList}
+                    keyExtractor={(item: any, index: any) => String(index)}
+                  />
+                </View>
+              ) : (
+                <View style={styles.noDataContainer}>
+                  <Text style={styles.noExpansesText}>No event added yet.</Text>
+                </View>
+              )}
+            </View>
 
             <View style={styles.textDirection}>
               <Text style={styles.labelText}>Recent Expenses</Text>
@@ -742,5 +834,24 @@ const styles = StyleSheet.create({
     color: colors.THEME_WHITE,
     fontSize: 14,
     fontWeight: '400',
+  },
+  eventContainer: {
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 'auto',
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginVertical: 5,
+    maxHeight: 450,
+  },
+  noDataContainer: {
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 80,
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginVertical: 5,
   },
 });

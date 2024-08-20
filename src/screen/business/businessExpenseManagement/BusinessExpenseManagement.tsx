@@ -50,11 +50,6 @@ const BusinessExpenseManagement = ({navigation}: {navigation: any}) => {
     setBarData([]);
   };
 
-  // function for open side menu
-  const handleOpenDrawer = () => {
-    navigation.openDrawer();
-  };
-
   // function for get all expense data on api call
   const getData = async () => {
     const accountId = await AsyncStorage.getItem('accountId');
@@ -447,9 +442,9 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
   },
   createIconContainer: {
-    bottom: 30,
+    bottom: 40,
     position: 'absolute',
-    right: 40,
+    right: 0,
     zIndex: 1,
   },
   graphLabelContainer: {

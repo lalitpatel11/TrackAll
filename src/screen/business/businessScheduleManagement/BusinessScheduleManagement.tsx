@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   createIconContainer: {
     bottom: 30,
     position: 'absolute',
-    right: 30,
+    right: -5,
     zIndex: 1,
   },
   detailsContainer: {

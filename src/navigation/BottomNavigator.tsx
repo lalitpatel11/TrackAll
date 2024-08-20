@@ -110,7 +110,13 @@ function BottomTabs({
                       source={require('../assets/pngImage/community.png')}
                     />
                   ) : label === 'Create' ? (
-                    <Create navigation={navigation} />
+                    <View style={styles.createTabContainer}>
+                      <Image
+                        style={styles.createIcon}
+                        resizeMode="contain"
+                        source={require('../assets/pngImage/logo.png')}
+                      />
+                    </View>
                   ) : label === 'GoalTracker' ? (
                     <Image
                       style={styles.tabIcons}
@@ -252,7 +258,13 @@ function BottomTabs({
                       source={require('../assets/pngImage/community.png')}
                     />
                   ) : label === 'Create' ? (
-                    <Create navigation={navigation} />
+                    <View style={styles.createTabContainer}>
+                      <Image
+                        style={styles.createIcon}
+                        resizeMode="contain"
+                        source={require('../assets/pngImage/logo.png')}
+                      />
+                    </View>
                   ) : label === 'GoalTracker' ? (
                     <Image
                       style={styles.tabIcons}
@@ -325,13 +337,7 @@ export default function App({navigation}: {navigation: any}) {
           name="OrganizationHome"
           component={OrganizationHome}
         />
-      ) : (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="Home"
-          component={Home}
-        />
-      )}
+      ) : null}
 
       {userType == '1' ? (
         <Tab.Screen
@@ -351,21 +357,9 @@ export default function App({navigation}: {navigation: any}) {
           name="OrganizationGroup"
           component={OrganizationGroup}
         />
-      ) : (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="Community"
-          component={Community}
-        />
-      )}
+      ) : null}
 
-      {userType == '1' ? (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="Create"
-          component={Create}
-        />
-      ) : userType == '2' ? (
+      {userType == '1' ? null : userType == '2' ? (
         <Tab.Screen
           options={{headerShown: false}}
           name="BusinessScheduleManagement"
@@ -377,13 +371,7 @@ export default function App({navigation}: {navigation: any}) {
           name="OrganizationScheduleManagement"
           component={OrganizationScheduleManagement}
         />
-      ) : (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="Create"
-          component={Create}
-        />
-      )}
+      ) : null}
 
       {userType == '1' ? (
         <Tab.Screen
@@ -403,13 +391,7 @@ export default function App({navigation}: {navigation: any}) {
           name="GoalTracker"
           component={GoalTracker}
         />
-      ) : (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="GoalTracker"
-          component={GoalTracker}
-        />
-      )}
+      ) : null}
 
       {userType == '1' ? (
         <Tab.Screen
@@ -429,13 +411,7 @@ export default function App({navigation}: {navigation: any}) {
           name="OrganizationEventManagement"
           component={OrganizationEventManagement}
         />
-      ) : (
-        <Tab.Screen
-          options={{headerShown: false}}
-          name="Notes"
-          component={Notes}
-        />
-      )}
+      ) : null}
     </Tab.Navigator>
   );
 }
@@ -482,5 +458,28 @@ const styles = StyleSheet.create({
   tabActive: {
     borderBottomWidth: 3,
     borderBottomColor: colors.THEME_ORANGE,
+  },
+  createTabContainer: {
+    alignItems: 'center',
+    backgroundColor: colors.BLACK2,
+    borderColor: colors.BLACK3,
+    borderRadius: 100,
+    borderWidth: 2,
+    elevation: 5,
+    justifyContent: 'center',
+    padding: 5,
+    position: 'absolute',
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    top: -35,
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+  },
+  createIcon: {
+    height: 65,
+    width: 65,
   },
 });

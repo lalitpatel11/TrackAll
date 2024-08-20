@@ -71,8 +71,6 @@ const AddNewAppointment = ({
 
     BusinessService.postAllBusinessOnService(body)
       .then((response: any) => {
-        console.log(response.data);
-
         setAllServices(response?.data?.allservicelist);
       })
       .catch(error => {
@@ -102,8 +100,6 @@ const AddNewAppointment = ({
       date: date ? date : selectedDate,
       serviceid: serviceid ? serviceid : appointmentService?.serviceid,
     };
-    console.log(body);
-
     BusinessService.postAllTimeSLot(body)
       .then((response: any) => {
         setAllTimeSLots(response?.data?.timeslotslisting);
@@ -293,16 +289,22 @@ const AddNewAppointment = ({
                       renderItem={renderServiceList}
                       keyExtractor={(item: any, index: any) => String(index)}
                     /> */}
-                    <ScrollView nestedScrollEnabled={true}>
-                      {allServices.map(item => {
-                        return (
-                          <AllServiceTab
-                            items={item}
-                            selectService={handleSelectService}
-                          />
-                        );
-                      })}
-                    </ScrollView>
+                    {allServices?.length > 0 ? (
+                      <ScrollView nestedScrollEnabled={true}>
+                        {allServices.map(item => {
+                          return (
+                            <AllServiceTab
+                              items={item}
+                              selectService={handleSelectService}
+                            />
+                          );
+                        })}
+                      </ScrollView>
+                    ) : (
+                      <Text style={styles.noDataText}>
+                        No Service Available.
+                      </Text>
+                    )}
                   </View>
                 ) : null}
               </View>

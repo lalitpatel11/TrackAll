@@ -535,7 +535,7 @@ const OrganizationHome = ({navigation}: {navigation: any}) => {
               <Text style={styles.labelText}>Expenses</Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('BottomNavigator', {
+                  navigation.navigate('StackNavigation', {
                     screen: 'OrganizationExpenseManagement',
                   });
                 }}>

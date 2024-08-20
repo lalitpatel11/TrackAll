@@ -588,7 +588,7 @@ const styles = StyleSheet.create({
   createIconContainer: {
     bottom: 30,
     position: 'absolute',
-    right: 40,
+    right: 10,
     zIndex: 1,
   },
   noDataText: {

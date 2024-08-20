@@ -40,7 +40,6 @@ const CommunityPageTab = ({
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              resizeMode="contain"
               source={{uri: `${items?.communityimage}`}}
             />
           </View>
@@ -48,7 +47,6 @@ const CommunityPageTab = ({
           <View style={styles.noGroupImageContainer}>
             <View style={styles.noGroupImage}>
               <Image
-                resizeMode="contain"
                 style={styles.image}
                 source={require('../../assets/pngImage/noImage.png')}
               />
@@ -69,7 +67,6 @@ const CommunityPageTab = ({
           {/* date section */}
           <View style={styles.direction}>
             <Image
-              resizeMode="contain"
               style={{height: 15, width: 15}}
               tintColor={colors.THEME_WHITE}
               source={require('../../assets/pngImage/CalendarBlank.png')}

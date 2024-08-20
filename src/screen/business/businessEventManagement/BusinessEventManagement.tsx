@@ -1,6 +1,7 @@
 // external imports
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Image,
   PermissionsAndroid,
@@ -12,7 +13,6 @@ import {
   View,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import LinearGradient from 'react-native-linear-gradient';
 import React, {useEffect, useRef, useState} from 'react';
 // internal imports
 import CommonToast from '../../../constants/CommonToast';
@@ -376,9 +376,9 @@ const BusinessEventManagement = ({navigation}: {navigation: any}) => {
               </>
             ) : (
               <>
-                {sharedEvent?.length > 0 ? (
+                {allNearByEventList?.length > 0 ? (
                   <FlatList
-                    data={sharedEvent}
+                    data={allNearByEventList}
                     renderItem={renderPageList}
                     keyExtractor={(item: any, index: any) => String(index)}
                   />
@@ -404,9 +404,7 @@ const BusinessEventManagement = ({navigation}: {navigation: any}) => {
       )}
 
       {/* create notes icon */}
-      <LinearGradient
-        colors={['#F28520', '#F5BD35']}
-        style={styles.createIconContainer}>
+      <View style={styles.createIconContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('StackNavigation', {
@@ -419,7 +417,7 @@ const BusinessEventManagement = ({navigation}: {navigation: any}) => {
             source={require('../../../assets/pngImage/Plus.png')}
           />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* toaster message for error response from API  */}
       <CommonToast ref={toastRef} />
@@ -475,7 +473,7 @@ const styles = StyleSheet.create({
   },
   createIconContainer: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.THEME_ORANGE,
     borderRadius: 100,
     bottom: 60,
     height: 60,

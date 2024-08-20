@@ -79,6 +79,7 @@ const AddScheduleManagementButton = ({navigation}: {navigation: any}) => {
         onPressItem={name => {
           handleRoute(name);
         }}
+        buttonSize={60}
       />
     </View>
   );
@@ -91,9 +92,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 100,
     justifyContent: 'center',
-    position: 'absolute',
-    right: -35,
-    top: 20,
-    zIndex: 1,
   },
 });

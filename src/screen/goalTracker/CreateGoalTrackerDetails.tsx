@@ -282,7 +282,6 @@ const CreateGoalTrackerDetails = ({
                         setOpen(false);
                         setDate(date);
                         setErrMsg(false);
-
                         let selectedTime = moment(date).format('hh:mm A');
                         if (timeList.includes(selectedTime)) {
                         } else {

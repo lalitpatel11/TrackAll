@@ -107,10 +107,6 @@ const AddNewOrganizationAppointment = ({navigation}: {navigation: any}) => {
       data.append('description', values.appointmentDescription);
       data.append('selecttype', groupType);
 
-
-      console.log('===========data=========================');
-      console.log(data);
-      console.log('====================================');
       OrganizationService.postAddOrganizationAppointment(data)
         .then((response: any) => {
           setLoader(false);

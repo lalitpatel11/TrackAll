@@ -22,11 +22,15 @@ const CreateRoutine = ({navigation, route}: {navigation: any; route: any}) => {
   const [loader, setLoader] = useState(false);
   const [pageLoader, setPageLoader] = useState(false);
   const [preferenceList, setPreferenceList] = useState<any[]>([]);
+  const [groupId, setGroupId] = useState(route?.params?.data);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setBusinessId(route?.params?.id);
       setPageLoader(true);
+
+      // group id
+      setGroupId(route?.params?.data);
 
       //  api call for get all preference list
       UserAuthService.preferenceList()
@@ -73,6 +77,7 @@ const CreateRoutine = ({navigation, route}: {navigation: any; route: any}) => {
           preferenceId: arrayList,
           businessId: businessId,
           screenName: route?.params?.screenName,
+          groupId: groupId,
         },
       });
     } else {

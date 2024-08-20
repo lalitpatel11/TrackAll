@@ -29,7 +29,6 @@ const EmployeeDetailsOnOrganization = ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [employeeDetails, setEmployeeDetails] = useState(route?.params?.data);
   const [employeeId, setEmployeeId] = useState(0);
-  const [profileImage, setProfileImage] = useState('');
   const toastRef = useRef<any>();
   const [selectedDate, setSelectedDate] = useState(
     moment(new Date()).format('YYYY-MM-DD'),
@@ -433,18 +432,20 @@ const EmployeeDetailsOnOrganization = ({
                 />
               </TouchableOpacity> */}
 
-          <View style={styles.ImageSection}>
-            <Image
-              source={{
-                uri: `${
-                  profileImage
-                    ? profileImage.path
-                    : route?.params?.data?.profile_image
-                }`,
-              }}
-              style={styles.profileImage}
-            />
-          </View>
+          {route?.params?.data?.profile_image != '' ? (
+            <View style={styles.ImageSection}>
+              <Image
+                source={{
+                  uri: `${route?.params?.data?.profile_image}`,
+                }}
+                style={styles.profileImage}
+              />
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.noImage}>No images added</Text>
+            </View>
+          )}
 
           {/* employee number section  */}
           <View>
@@ -614,5 +615,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: '100%',
     width: '100%',
+  },
+  noImage: {
+    color: colors.WHITE,
+    fontSize: 12,
+    padding: 5,
+    fontWeight: '400',
+    textAlign: 'center',
   },
 });

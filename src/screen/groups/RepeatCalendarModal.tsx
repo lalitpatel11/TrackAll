@@ -17,10 +17,12 @@ const RepeatCalendarModal = ({
   onClose,
   onSubmitClick,
   visibleModal,
+  unAvailableDates,
 }: {
   onClose: Function;
   onSubmitClick: Function;
   visibleModal: boolean;
+  unAvailableDates?: any;
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -69,6 +71,7 @@ const RepeatCalendarModal = ({
               dayLabelsWrapper={styles.days}
               monthTitleStyle={styles.month}
               minDate={new Date()}
+              disabledDates={unAvailableDates}
               disabledDatesTextStyle={styles.pastDate}
               nextComponent={
                 <View style={styles.nextBtn}>

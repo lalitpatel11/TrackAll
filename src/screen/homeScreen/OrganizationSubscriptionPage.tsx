@@ -2,6 +2,7 @@
 import {
   ActivityIndicator,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,6 +22,19 @@ import CommonToast from '../../constants/CommonToast';
 import WebView from 'react-native-webview';
 import {API} from '../../service/api/ApiDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//import : third parties
+import {
+  initConnection,
+  endConnection,
+  finishTransaction,
+  flushFailedPurchasesCachedAsPendingAndroid,
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+  getSubscriptions,
+  requestSubscription,
+  SubscriptionPurchase,
+} from 'react-native-iap';
+import CancelSubsIos from '../../modals/CancelSubsIos/CancelSubsIos';
 
 const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -32,6 +46,59 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
   const [myUserId, setMyUserId] = useState<any>();
   const [planId, setPlanId] = useState('');
   const [webViewModal, setWebViewModal] = useState(false);
+  const [monthlyIosSubs, setMonthlyIosSubs] = useState([]);
+  const [showCancelSub, setShowCancelSub] = useState(false);
+  //function : imp function
+  useEffect(() => {
+    let purchaseUpdateSubscription = null;
+    let purchaseErrorSubscription = null;
+    const initializeConnection = async () => {
+      try {
+        await initConnection();
+        if (Platform.OS === 'android') {
+          await flushFailedPurchasesCachedAsPendingAndroid();
+          purchaseUpdateSubscription = purchaseUpdatedListener(
+            (purchase: SubscriptionPurchase) => {
+              const receipt = purchase.transactionReceipt;
+              console.log(receipt);
+            },
+          );
+          purchaseErrorSubscription = purchaseErrorListener((error: any) => {
+            console.warn('purchaseErrorListener', error);
+          });
+        }
+      } catch (error) {
+        console.error('An error occurred', error.message);
+      }
+    };
+    fetchProducts();
+    initializeConnection();
+    return () => {
+      purchaseUpdateSubscription = null;
+      purchaseErrorSubscription = null;
+    };
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const products = await getSubscriptions({
+        skus: Platform.select({
+          ios: [
+            'Plan_b_monthly',
+            'Plan_c_monthly',
+            'Plan_d_monthly',
+            'Plan_b_yearly',
+            'Plan_c_yearly',
+            'Plan_d_yearly',
+          ],
+          android: [],
+        }),
+      });
+      setMonthlyIosSubs(products);
+    } catch (error) {
+      console.error('Error occurred while fetching products', error.message);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -49,6 +116,8 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
 
     SubscriptionServices.getMySubscription()
       .then((response: any) => {
+        console.log('RESPONSE', response.data);
+
         setPageLoader(false);
         setMySubscriptionPlan(response?.data?.plandetails);
       })
@@ -77,7 +146,20 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={handleSubmitButtonClick}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
@@ -88,16 +170,67 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
     return (
       <SubscriptionPlanTab
         item={item}
-        submitButtonClick={handleSubmitButtonClick}
+        submitButtonClick={() => {
+          if (Platform.OS == 'ios') {
+            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+              handleSubmitButtonClick(item);
+            } else {
+              toastRef.current.getToast(
+                'Please cancel your previous subscription',
+                'warning',
+              );
+            }
+          } else {
+            handleSubmitButtonClick(item);
+          }
+        }}
         currentPlan={mySubscriptionPlan?.price}
       />
     );
   };
 
   // navigation on payment click
-  const handleSubmitButtonClick = (planId: any) => {
-    setPlanId(planId);
-    setWebViewModal(true);
+  const handleSubmitButtonClick = async (item: any) => {
+    console.log('ITEMS', item);
+
+    if (Platform.OS === 'ios') {
+      const index = monthlyIosSubs.findIndex(e => e.productId == item.title);
+      console.log(index);
+
+      var data = await requestSubscription({
+        sku: monthlyIosSubs[index].productId,
+      });
+      const postData = {
+        planId: item.planid,
+        ...data,
+      };
+      onSubmit(postData);
+    } else {
+      setPlanId(item.planid);
+      setWebViewModal(true);
+    }
+  };
+
+  // function on pay button click on api call
+  const onSubmit = async (values: any) => {
+    const data = {
+      plan_id: values?.planId,
+      transactionReceipt: values.transactionReceipt,
+      transactionId: values.transactionId,
+    };
+    SubscriptionServices.purchaseAppleSubscription(data)
+      .then((response: any) => {
+        if (response.data.status) {
+          toastRef.current.getToast(response.data.message, 'success');
+          getMyPlan();
+          getAllPlans();
+        } else {
+          toastRef.current.getToast(response.data.message, 'warning');
+        }
+      })
+      .catch((error: any) => {
+        console.error('error', JSON.stringify(error));
+      });
   };
 
   const handleSkip = () => {
@@ -168,7 +301,11 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
               {mySubscriptionPlan?.price !== 'Free' ? (
                 <TouchableOpacity
                   onPress={() => {
-                    setDeleteModal(true);
+                    if (Platform.OS === 'android') {
+                      setDeleteModal(true);
+                    } else {
+                      setShowCancelSub(true);
+                    }
                   }}
                   style={styles.cancelButtonContainer}>
                   <Text style={styles.cancelButtonText}>
@@ -288,6 +425,7 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
 
       {/* toaster message for error response from API */}
       <CommonToast ref={toastRef} />
+      <CancelSubsIos visible={showCancelSub} setVisibility={setShowCancelSub} />
     </View>
   );
 };
@@ -295,13 +433,16 @@ const OrganizationSubscriptionPage = ({navigation}: {navigation: any}) => {
 export default OrganizationSubscriptionPage;
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {
+    backgroundColor: colors.BLACK,
+    flex: 1,
+  },
   body: {
     flex: 1,
     padding: 10,
   },
   heading: {
-    color: colors.THEME_BLACK,
+    color: colors.WHITE,
     fontSize: 16,
     fontWeight: '500',
     padding: 5,

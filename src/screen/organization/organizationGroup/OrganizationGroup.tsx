@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import React, {useEffect, useRef, useState} from 'react';
 //internal imports
 import CommonToast from '../../../constants/CommonToast';
@@ -18,6 +17,8 @@ import CustomHeader from '../../../constants/CustomHeader';
 import MyGroupsTab from '../../groups/MyGroupsTab';
 import OrganizationService from '../../../service/OrganisationService';
 import {colors} from '../../../constants/ColorConstant';
+import GroupServices from '../../../service/GroupServices';
+import PlanPurchaseModal from '../../groups/PlanPurchaseModal';
 
 const OrganizationGroup = ({navigation}: {navigation: any}) => {
   const [createGroupVisible, setCreateGroupVisible] = useState(false);
@@ -26,6 +27,9 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
   const [pageLoader, setPageLoader] = useState(false);
   const [searchText, setSearchText] = useState('');
   const toastRef = useRef<any>();
+  const [planPurchaseVisible, setPlanPurchaseVisible] = useState(false);
+  const [responseMsg, setResponseMsg] = useState('');
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -82,13 +86,31 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
 
   // navigation on group details page after create group
   const onGroupCreateClick = (groupDetails: any) => {
-    setCreateGroupVisible(!createGroupVisible);
-    navigation.navigate('StackNavigation', {
-      screen: 'GroupDetails',
-      params: {
-        data: groupDetails?.groupid,
-      },
-    });
+    setLoader(true);
+
+    GroupServices.postCreateGroup(groupDetails)
+      .then((response: any) => {
+        setLoader(false);
+        if (response.data.status === 1) {
+          setResponseMsg(response.data.message);
+          setPlanPurchaseVisible(false);
+          setCreateGroupVisible(!createGroupVisible);
+          navigation.navigate('StackNavigation', {
+            screen: 'GroupDetails',
+            params: {
+              data: response.data?.group?.groupid,
+            },
+          });
+        } else if (response.data.status === 0) {
+          setCreateGroupVisible(false);
+          setPlanPurchaseVisible(true);
+          setResponseMsg(response.data.message);
+        }
+      })
+      .catch((error: any) => {
+        setLoader(false);
+        console.log(error, 'error');
+      });
   };
 
   // list for my group
@@ -96,6 +118,13 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
     return (
       <MyGroupsTab items={item} navigation={navigation} title={'MYGROUPS'} />
     );
+  };
+
+  const handlePlanPurchaseSubmitClick = () => {
+    setPlanPurchaseVisible(false);
+    navigation.navigate('StackNavigation', {
+      screen: 'SubscriptionPlan',
+    });
   };
 
   return (
@@ -175,9 +204,7 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
       )}
 
       {/* create notes icon  */}
-      <LinearGradient
-        colors={['#F28520', '#F5BD35']}
-        style={styles.createIconContainer}>
+      <View style={styles.createIconContainer}>
         <TouchableOpacity
           onPress={() => {
             // handleCreateClick();
@@ -189,7 +216,7 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
             source={require('../../../assets/pngImage/Plus.png')}
           />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {/* Modal for create group */}
       <CreateGroupModal
@@ -201,6 +228,17 @@ const OrganizationGroup = ({navigation}: {navigation: any}) => {
           onGroupCreateClick(groupDetails);
         }}
         navigation={navigation}
+        loader={loader}
+      />
+
+      {/* Modal for purchase plan*/}
+      <PlanPurchaseModal
+        visibleModal={planPurchaseVisible}
+        onClose={() => {
+          setPlanPurchaseVisible(false);
+        }}
+        responseMsg={responseMsg}
+        onSubmitClick={handlePlanPurchaseSubmitClick}
       />
 
       {/* toaster message for error response from API  */}
@@ -246,7 +284,7 @@ const styles = StyleSheet.create({
   },
   createIconContainer: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.THEME_ORANGE,
     borderRadius: 100,
     bottom: 60,
     height: 60,

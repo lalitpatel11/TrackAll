@@ -60,11 +60,14 @@ const AddNewBusinessAppointment = ({
       // for select type
       setGroupType(route?.params?.data?.selecttype);
 
-      //   for start time
+      // for select date
+      setSelectedDate(route?.params?.data?.date);
+
+      // for start time
       setSelectedStartTime(route?.params?.data?.start);
       setStartTimeList(route?.params?.data?.start);
 
-      //   for end time
+      // for end time
       setSelectedEndTime(route?.params?.data?.end);
       setEndTimeList(route?.params?.data?.end);
 
@@ -139,10 +142,6 @@ const AddNewBusinessAppointment = ({
       data.append('groupid', groupArrayList[0]);
     }
 
-    console.log('====================================');
-    console.log(data);
-    console.log('====================================');
-   
     BusinessService.postEditBusinessAppointment(data)
       .then((response: any) => {
         setLoader(false);

@@ -14,6 +14,7 @@ import React, {useRef} from 'react';
 import {colors} from '../../constants/ColorConstant';
 import ServiceTab from './ServiceTab';
 import BusinessService from '../../service/BusinessService';
+import CommonToast from '../../constants/CommonToast';
 
 const ViewServicesModal = ({
   data,
@@ -46,8 +47,8 @@ const ViewServicesModal = ({
 
     BusinessService.postDeleteService(body)
       .then(response => {
-        getUpdate();
         toastRef.current.getToast(response.data.message, 'success');
+        getUpdate();
       })
       .catch(error => {
         console.log(error);
@@ -128,6 +129,8 @@ const ViewServicesModal = ({
           </View>
         </View>
       </Modal>
+      {/* toaster message for error response from API  */}
+      <CommonToast ref={toastRef} />
     </View>
   );
 };

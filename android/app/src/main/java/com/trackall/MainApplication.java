@@ -1,4 +1,4 @@
-package com.trackall;
+package com.trackallapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
