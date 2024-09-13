@@ -10,22 +10,22 @@ const SignUpIntroScreenTab = ({item}: {item: any}) => {
       <View style={styles.imageContainer}>
         <Image
           style={styles.darkBackgroundImage}
-          resizeMode="contain"
+          resizeMode='stretch'
           source={item.darkBackgroundImage}
         />
         <Image
           style={styles.orangeBackgroundImage}
-          resizeMode="contain"
+          resizeMode="stretch"
           source={item.orangeBackgroundImage}
         />
         <Image
           style={styles.halfBackgroundImage}
-          resizeMode="contain"
+          resizeMode="stretch"
           source={item.halfBackgroundImage}
         />
         <Image
           style={styles.backgroundImage}
-          resizeMode="contain"
+          resizeMode="stretch"
           source={item.backGroundImage}
         />
 
@@ -45,6 +45,7 @@ export default SignUpIntroScreenTab;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: Dimensions.get('screen').width,
   },
   imageContainer: {
     height: Dimensions.get('screen').height,

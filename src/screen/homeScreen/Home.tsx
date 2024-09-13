@@ -59,7 +59,6 @@ const Home = ({navigation}: {navigation: any}) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setPageLoader(true);
       getTask();
       getLocation();
     });
@@ -74,6 +73,7 @@ const Home = ({navigation}: {navigation: any}) => {
   // function for get current location data on api call
   const getLocation = async () => {
     let granted = null;
+    let iosLocationPermission = null;
     if (Platform.OS === 'android') {
       granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -85,15 +85,18 @@ const Home = ({navigation}: {navigation: any}) => {
         },
       );
     } else {
-      await Geolocation.requestAuthorization('whenInUse');
+      iosLocationPermission = await Geolocation.requestAuthorization(
+        'whenInUse',
+      );
     }
+    let metadata = null;
     if (
       granted === PermissionsAndroid.RESULTS.GRANTED ||
-      Platform.OS === 'ios'
+      (Platform.OS === 'ios' && iosLocationPermission == 'granted')
     ) {
       Geolocation.getCurrentPosition(
         position => {
-          let metadata = {
+          metadata = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             latitudeDelta: 0.015,
@@ -108,59 +111,92 @@ const Home = ({navigation}: {navigation: any}) => {
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     }
+    getData(metadata ? metadata : '');
   };
 
   // function for get all home details data on api call
   const getData = async (metadata?: any) => {
-    // APi for get home data
-    setPageLoader(true);
-    const data = {
-      lat: metadata ? metadata?.latitude : region.latitude,
-      long: metadata ? metadata?.longitude : region.longitude,
-    };
-    HomeScreenService.postHomeDetails(data)
-      .then((response: any) => {
-        setPageLoader(false);
-        setGroupList(response?.data?.groupList);
-        setPostCount(response?.data?.postcount);
-        setEventCount(response?.data?.nearbyeventcounts);
-      })
-      .catch(error => {
-        setPageLoader(false);
-        console.log(error, 'error');
-      });
+    try {
+      // API for getting home data
+      setPageLoader(true);
+      const data = {
+        lat: metadata ? metadata?.latitude : region.latitude,
+        long: metadata ? metadata?.longitude : region.longitude,
+      };
+
+      const response = await HomeScreenService.postHomeDetails(data);
+      console.log(response?.data)
+
+      setGroupList(response?.data?.groupList);
+      setPostCount(response?.data?.postcount);
+      setEventCount(response?.data?.nearbyeventcounts);
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setPageLoader(false);
+    }
   };
 
   // function for get all task data on api call
+
+  // const getTask = async () => {
+  //   setPageLoader(true);
+  //   const body = {
+  //     date: selectedDate,
+  //   };
+
+  //   HomeScreenService.postTaskOnHome(body)
+  //     .then((response: any) => {
+  //       // for all incoming expenses
+  //       setUpComingExpenses(response?.data?.allupcommingexpenses);
+  //       setUpComingEvent(response?.data?.upcomingEvent);
+  //       // for all un hide tasks
+  //       var newArray = response.data.tasks.filter((e: any) => {
+  //         {
+  //           return e.hidestatus == '0';
+  //         }
+  //       });
+  //       setUnHideTaskList(newArray);
+
+  //       // for all hide tasks
+  //       var newArray = response.data.tasks.filter((e: any) => {
+  //         {
+  //           return e.hidestatus == '1';
+  //         }
+  //       });
+  //       setHideTaskList(newArray);
+  //     })
+  //     .catch(error => {
+  //       console.log(error, 'error');
+  //       setPageLoader(false);
+  //     });
+  // };
+
   const getTask = async () => {
-    const body = {
-      date: selectedDate,
-    };
+    try {
+      setPageLoader(true);
+      const body = {
+        date: selectedDate,
+      };
 
-    HomeScreenService.postTaskOnHome(body)
-      .then((response: any) => {
-        // for all incoming expenses
-        setUpComingExpenses(response?.data?.allupcommingexpenses);
-        setUpComingEvent(response?.data?.upcomingEvent);
-        // for all un hide tasks
-        var newArray = response.data.tasks.filter((e: any) => {
-          {
-            return e.hidestatus == '0';
-          }
-        });
-        setUnHideTaskList(newArray);
+      const response = await HomeScreenService.postTaskOnHome(body);
+      setUpComingExpenses(response?.data?.allupcommingexpenses);
+      setUpComingEvent(response?.data?.upcomingEvent);
 
-        // for all hide tasks
-        var newArray = response.data.tasks.filter((e: any) => {
-          {
-            return e.hidestatus == '1';
-          }
-        });
-        setHideTaskList(newArray);
-      })
-      .catch(error => {
-        console.log(error, 'error');
-      });
+      const unHiddenTasks = response.data.tasks.filter(
+        (e: any) => e.hidestatus == '0',
+      );
+      setUnHideTaskList(unHiddenTasks);
+
+      const hiddenTasks = response.data.tasks.filter(
+        (e: any) => e.hidestatus == '1',
+      );
+      setHideTaskList(hiddenTasks);
+    } catch (error) {
+      console.log(error, 'error');
+    } finally {
+      setPageLoader(false);
+    }
   };
 
   // navigation on my group, shared groups, my routine and shared routine

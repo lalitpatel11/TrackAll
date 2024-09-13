@@ -1,8 +1,10 @@
 // external imports
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Image,
+  Linking,
   PermissionsAndroid,
   Platform,
   StyleSheet,
@@ -20,6 +22,7 @@ import CustomHeader from '../../constants/CustomHeader';
 import EventService from '../../service/EventService';
 import EventTab from './EventTab';
 import {colors} from '../../constants/ColorConstant';
+import {check} from 'react-native-permissions';
 
 const EventManagement = ({navigation}: {navigation: any}) => {
   const [eventCount, setEventCount] = useState(0);
@@ -49,6 +52,26 @@ const EventManagement = ({navigation}: {navigation: any}) => {
 
   // function for get current location api call
   const getLocation = async () => {
+    const temp = await check('ios.permission.LOCATION_WHEN_IN_USE');
+    if (temp !== 'granted') {
+      setPageLoader(false);
+      Alert.alert(
+        'Location Permission',
+        'Please enable location permissions in your settings to access this function.',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => console.log('Cancel Pressed'),
+          },
+          {
+            text: 'Open Setting',
+            onPress: () => Linking.openSettings(),
+          },
+        ],
+      );
+      return;
+    }
     let granted = null;
     if (Platform.OS === 'android') {
       granted = await PermissionsAndroid.request(

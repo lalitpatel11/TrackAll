@@ -43,6 +43,7 @@
 		63AC8CEC2D740156D9FD0807 /* libPods-TrackAll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TrackAll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TrackAll/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DAEEE0BC53579ABFEB1816B /* Pods-TrackAll-TrackAllTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackAll-TrackAllTests.release.xcconfig"; path = "Target Support Files/Pods-TrackAll-TrackAllTests/Pods-TrackAll-TrackAllTests.release.xcconfig"; sourceTree = "<group>"; };
+		ACEB319C2C90703500A91765 /* TrackAll-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TrackAll-Bridging-Header.h"; sourceTree = "<group>"; };
 		CBFCA150D09DAE32C0809DE7 /* Pods-TrackAll.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackAll.release.xcconfig"; path = "Target Support Files/Pods-TrackAll/Pods-TrackAll.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F17958CE2C410BE6003D2349 /* TrackAll.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TrackAll.entitlements; path = TrackAll/TrackAll.entitlements; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				ACEB319C2C90703500A91765 /* TrackAll-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -213,7 +215,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1520;
 					};
 				};
 			};
@@ -508,7 +510,7 @@
 				CODE_SIGN_ENTITLEMENTS = TrackAll/TrackAll.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = QF39G97PNW;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TrackAll/Info.plist;
@@ -525,6 +527,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trackall.org;
 				PRODUCT_NAME = TrackAll;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "TrackAll-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -540,7 +543,7 @@
 				CODE_SIGN_ENTITLEMENTS = TrackAll/TrackAll.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = QF39G97PNW;
 				INFOPLIST_FILE = TrackAll/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -556,6 +559,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trackall.org;
 				PRODUCT_NAME = TrackAll;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "TrackAll-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
