@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  NativeModules,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -183,7 +184,11 @@ const BusinessSignUp = ({navigation}: {navigation: any}) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
       {/* reusable header component  */}
-      <Header headerText={'Business Details'} backClick={handleBackClick} />
+      <Header
+        headerText={'Business Details'}
+        backClick={handleBackClick}
+        style={{marginTop: NativeModules?.StatusBarManager?.HEIGHT}}
+      />
 
       {/* body section */}
       <KeyboardAwareScrollView

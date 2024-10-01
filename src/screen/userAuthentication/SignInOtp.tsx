@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  NativeModules
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
@@ -148,7 +149,11 @@ const SignInOtp = (props: any) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
       {/* reusable header component  */}
-      <Header headerText={'Go back'} backClick={handleBackClick} />
+      <Header
+        headerText={'Go back'}
+        backClick={handleBackClick}
+        style={{marginTop: NativeModules?.StatusBarManager?.HEIGHT}}
+      />
 
       {/* body section */}
       <KeyboardAwareScrollView
@@ -167,7 +172,11 @@ const SignInOtp = (props: any) => {
             <View style={styles.instructionContainer}>
               <Text style={styles.instructionText}>
                 Verification code has been sent {'\n'}to your mail id
-                successfully
+                successfully.
+              </Text>
+              <Text style={{...styles.instructionText, ...styles.note}}>
+                Note : If you don’t receive the email, please check your spam
+                folder.
               </Text>
             </View>
 
@@ -289,7 +298,7 @@ const styles = StyleSheet.create({
   backContainer: {
     backgroundColor: colors.BLACK2,
     borderRadius: 15,
-    height: 415,
+    height: 460,
     marginTop: 80,
     opacity: 29,
   },
@@ -313,6 +322,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingHorizontal: 20,
     textAlign: 'center',
+  },
+  note: {
+    marginTop: 5,
+    fontSize: 16,
+    fontWeight: '400',
   },
   errorMessageContainer: {
     alignSelf: 'center',

@@ -153,14 +153,15 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
         item={item}
         submitButtonClick={() => {
           if (Platform.OS == 'ios') {
-            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
-              handleSubmitButtonClick(item);
-            } else {
-              toastRef.current.getToast(
-                'Please cancel your previous subscription',
-                'warning',
-              );
-            }
+            handleSubmitButtonClick(item);
+            // if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+            //   handleSubmitButtonClick(item);
+            // } else {
+            //   toastRef.current.getToast(
+            //     'Please cancel your previous subscription',
+            //     'warning',
+            //   );
+            // }
           } else {
             handleSubmitButtonClick(item);
           }
@@ -177,14 +178,15 @@ const BusinessSubscriptionPage = ({navigation}: {navigation: any}) => {
         item={item}
         submitButtonClick={() => {
           if (Platform.OS == 'ios') {
-            if (mySubscriptionPlan.planname == 'Free (Plan A)') {
-              handleSubmitButtonClick(item);
-            } else {
-              toastRef.current.getToast(
-                'Please cancel your previous subscription',
-                'warning',
-              );
-            }
+            handleSubmitButtonClick(item);
+            // if (mySubscriptionPlan.planname == 'Free (Plan A)') {
+            //   handleSubmitButtonClick(item);
+            // } else {
+            //   toastRef.current.getToast(
+            //     'Please cancel your previous subscription',
+            //     'warning',
+            //   );
+            // }
           } else {
             handleSubmitButtonClick(item);
           }

@@ -8,6 +8,7 @@ import {
   Platform,
   StyleSheet,
   Keyboard,
+  NativeModules,
 } from 'react-native';
 import CameraGalleryModal from '../groups/CameraGalleryModal';
 import Header from '../../constants/Header';
@@ -182,7 +183,11 @@ const OrganizationSignUp = ({navigation}: {navigation: any}) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
       {/* reusable header component  */}
-      <Header headerText={'Organization Details'} backClick={handleBackClick} />
+      <Header
+        headerText={'Organization Details'}
+        backClick={handleBackClick}
+        style={{marginTop: NativeModules?.StatusBarManager?.HEIGHT}}
+      />
 
       {/* body section */}
       <KeyboardAwareScrollView

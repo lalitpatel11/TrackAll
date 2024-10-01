@@ -1,5 +1,5 @@
 // external imports
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet, ViewStyle} from 'react-native';
 import React from 'react';
 // internal imports
 import {colors} from './ColorConstant';
@@ -7,12 +7,14 @@ import {colors} from './ColorConstant';
 const Header = ({
   headerText,
   backClick,
+  style,
 }: {
   headerText: string;
   backClick: Function;
+  style?: ViewStyle
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...style}}>
       <TouchableOpacity
         style={styles.backArrow}
         onPress={() => {
