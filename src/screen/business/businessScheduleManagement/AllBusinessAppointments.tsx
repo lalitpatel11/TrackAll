@@ -46,8 +46,8 @@ const AllBusinessAppointments = ({
     // end: '2024-02-23 04:00:00',
     // title: 'New Year Party',
     // summary: 'xyz Location',
-    // name: 'Remindably',
-    // description: 'remindably',
+    // name: 'TrackAll',
+    // description: 'TrackAll',
     // },
   ]);
 

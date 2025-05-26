@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import React, {useEffect, useRef, useState} from 'react';
 // internal imports
 import CommonToast from '../../../constants/CommonToast';
@@ -59,14 +59,14 @@ const OrganizationEventManagement = ({navigation}: {navigation: any}) => {
       granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Remindably Permission',
-          message: 'Remindably needs access to your location ',
+          title: 'TrackAll Permission',
+          message: 'TrackAll needs access to your location ',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
         },
       );
     } else {
-      await Geolocation.requestAuthorization('whenInUse');
+       Geolocation.requestAuthorization();
     }
     if (
       granted === PermissionsAndroid.RESULTS.GRANTED ||

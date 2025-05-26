@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import React, {useEffect, useRef, useState} from 'react';
 import moment from 'moment';
 //internal imports
@@ -78,16 +78,14 @@ const Home = ({navigation}: {navigation: any}) => {
       granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Remindably Permission',
-          message: 'Remindably needs access to your location ',
+          title: 'TrackAll Permission',
+          message: 'TrackAll needs access to your location ',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
         },
       );
     } else {
-      iosLocationPermission = await Geolocation.requestAuthorization(
-        'whenInUse',
-      );
+      iosLocationPermission = Geolocation.requestAuthorization();
     }
     let metadata = null;
     if (
@@ -125,7 +123,7 @@ const Home = ({navigation}: {navigation: any}) => {
       };
 
       const response = await HomeScreenService.postHomeDetails(data);
-      console.log(response?.data)
+      console.log(response?.data);
 
       setGroupList(response?.data?.groupList);
       setPostCount(response?.data?.postcount);

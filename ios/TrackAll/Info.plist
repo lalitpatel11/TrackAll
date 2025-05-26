@@ -41,8 +41,6 @@
 	<string>TRACK-ALL want to use your calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow TRACK-ALL to access your photos. Capture/Choose a picture and set as profile image</string>
-	<!-- <key>NSContactsUsageDescription</key>
-	<string></string> -->
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>We need access to your document folder to save and manage your files within the app.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
@@ -57,6 +55,12 @@
 	<string>Allow TRACK-ALL to access your photos. Capture/Choose a picture and set as profile image</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow TRACK-ALL to access your photos. Capture/Choose a picture and set as profile image</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

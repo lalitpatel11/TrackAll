@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import React, {useEffect, useRef, useState} from 'react';
 // internal imports
 import CommonToast from '../../../constants/CommonToast';
@@ -58,22 +58,23 @@ const BusinessEventManagement = ({navigation}: {navigation: any}) => {
   // function for get current location api call
   const getLocation = async () => {
     let granted = null;
+    let iosLocationPermission = null;
     if (Platform.OS === 'android') {
       granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Remindably Permission',
-          message: 'Remindably needs access to your location ',
+          title: 'TrackAll Permission',
+          message: 'TrackAll needs access to your location ',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
         },
       );
     } else {
-      await Geolocation.requestAuthorization('whenInUse');
+      iosLocationPermission = Geolocation.requestAuthorization();
     }
     if (
       granted === PermissionsAndroid.RESULTS.GRANTED ||
-      Platform.OS === 'ios'
+      (Platform.OS === 'ios' && iosLocationPermission == 'granted')
     ) {
       Geolocation.getCurrentPosition(
         position => {
@@ -94,7 +95,6 @@ const BusinessEventManagement = ({navigation}: {navigation: any}) => {
       );
     }
   };
-
   // function for get all my event data api call
   const getMyEventData = async (metadata?: any) => {
     const accountId = await AsyncStorage.getItem('accountId');

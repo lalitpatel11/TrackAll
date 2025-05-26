@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from '@react-native-community/geolocation';
 import LinearGradient from 'react-native-linear-gradient';
 import React, {useEffect, useRef, useState} from 'react';
 // internal imports
@@ -22,7 +22,7 @@ import CustomHeader from '../../constants/CustomHeader';
 import EventService from '../../service/EventService';
 import EventTab from './EventTab';
 import {colors} from '../../constants/ColorConstant';
-import { check } from 'react-native-permissions';
+import {check} from 'react-native-permissions';
 
 const NearByEvents = ({navigation}: {navigation: any}) => {
   const [allNearByEventList, setAllNearByEventList] = useState<any[]>([]);
@@ -50,43 +50,26 @@ const NearByEvents = ({navigation}: {navigation: any}) => {
 
   // function for get current location
   const getLocation = async () => {
-    const temp = await check('ios.permission.LOCATION_WHEN_IN_USE');
-    if (temp !== 'granted') {
-      setPageLoader(false);
-      Alert.alert(
-        'Location Permission',
-        'Please enable location permissions in your settings to access this function.',
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-            onPress: () => console.log('Cancel Pressed'),
-          },
-          {
-            text: 'Open Setting',
-            onPress: () => Linking.openSettings(),
-          },
-        ],
-      );
-      return;
-    }
     let granted = null;
+    let iosLocationPermission = null;
+
     if (Platform.OS === 'android') {
       granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Remindably Permission',
-          message: 'Remindably needs access to your location ',
+          title: 'TrackAll Permission',
+          message: 'TrackAll needs access to your location',
           buttonNegative: 'Cancel',
           buttonPositive: 'OK',
         },
       );
     } else {
-      await Geolocation.requestAuthorization('whenInUse');
+      iosLocationPermission = await Geolocation.requestAuthorization(); // <- add await here
     }
+
     if (
       granted === PermissionsAndroid.RESULTS.GRANTED ||
-      Platform.OS === 'ios'
+      (Platform.OS === 'ios' && iosLocationPermission === 'granted')
     ) {
       Geolocation.getCurrentPosition(
         position => {
